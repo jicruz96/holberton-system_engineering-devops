@@ -1,3 +1,3 @@
 #!/bin/bash
-sort | uniq -u
+tr '[:space:]' '[\n]' | sort | uniq -u
 
