@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# This is practice
+
+for content in *
+do
+    echo "$content" | cut -f 2 -d '-'
+done

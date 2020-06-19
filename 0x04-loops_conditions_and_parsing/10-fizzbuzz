@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# This is practice
+
+FIZZ_NUM="3"
+BUZZ_NUM="5"
+
+for ((i=1;i<=100;i++))
+do
+    if [ $((i%FIZZ_NUM)) -ne 0 ] && [ $((i%BUZZ_NUM)) -ne 0 ]
+    then
+        echo "$i"
+    else
+        if [ $((i%FIZZ_NUM)) -eq 0 ]
+        then
+            echo -n "Fizz"
+        fi
+
+        if [ $((i%BUZZ_NUM)) -eq 0 ]
+        then
+            echo -n "Buzz"
+        fi
+        echo ""
+    fi
+done
