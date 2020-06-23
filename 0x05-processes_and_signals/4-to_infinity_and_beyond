@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# This is a comment
+while :
+do
+    echo "To infinity and beyond"
+    sleep 2
+done
