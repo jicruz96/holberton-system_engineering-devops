@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Shows IPV4 Ips on machine currently
+ifconfig | grep 'inet addr' | awk '{print $2}' | cut -d ":" -f 2
