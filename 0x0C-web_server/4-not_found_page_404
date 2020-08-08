@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Sets up a 404 page and a redirect page on a Nginx web server
+
+# Task 1 Stuff
+apt-get -y update
+apt-get -y install nginx
+echo "Holberton School" > /var/www/html/index.html
+
+# Make error directory if it doesn't exist
+if [[ ! -d /var/www/error ]]
+then
+    mkdir /var/www/error
+fi
+
+# Create custom 404 file
+echo "Ceci n'est pas une page" > /var/www/error/custom_404.html
+
+# Add 404 file & redirect info to default
+STR="\
+\trewrite ^/redirect_me https://openpuppies.com/ permanent;\n\n\
+\terror_page 404 /custom_404.html;\n\
+\tlocation = /custom_404.html {\n\
+\t\troot /var/www/error;\n\
+\t\tinternal;\n\
+\t}\n\
+}\n"
+
+sed -i "s@^}@$STR@" /etc/nginx/sites-available/default
+
+# Resart Web Server
+service nginx restart

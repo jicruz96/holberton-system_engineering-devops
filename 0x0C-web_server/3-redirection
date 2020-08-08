@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# sets up a redirect page for a web server
+apt-get -y update
+apt-get -y install nginx
+echo "Holberton School" > /var/www/html/index.html
+str="\trewrite ^/redirect_me https://openpuppies.com/ permanent;\n}"
+sed -i "s@^}@$str@" /etc/nginx/sites-available/default
+service nginx restart
