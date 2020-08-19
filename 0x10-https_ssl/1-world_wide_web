@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# displays information about subdomains.
+
+dig_this () {
+
+    defaults="www lb-01 web-01 web-02"
+    domain=$1
+    subdomain=${2-$defaults}
+
+    for value in ${subdomain}
+    do
+        answer="The subdomain $value is a "
+        answer+=$(  dig $value"."$domain ANY |
+                    grep -A1 'ANSWER SECTION:' |
+                    tail -1 |
+                    awk '{print $4 " record and points to " $5}')
+        echo $answer
+    done
+}
+
+dig_this $1 $2
