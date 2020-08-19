@@ -5,12 +5,12 @@ dig_this () {
 
     defaults="www lb-01 web-01 web-02"
     domain=$1
-    subdomain=${2-$defaults}
+    subdomains=${2-$defaults}
 
-    for value in ${subdomain}
+    for sub in ${subdomains}
     do
-        answer="The subdomain $value is a "
-        answer+=$(  dig $value"."$domain ANY |
+        answer="The subdomain $sub is a "
+        answer+=$(  dig $sub"."$domain ANY |
                     grep -A1 'ANSWER SECTION:' |
                     tail -1 |
                     awk '{print $4 " record and points to " $5}')
