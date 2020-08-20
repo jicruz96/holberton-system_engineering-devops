@@ -1,15 +1,7 @@
 #!/usr/bin/env bash
 # Task 1
-
-# Kill apache2, which is listening on port 8080
 pkill apache2
-
-# Make nginx listen to port 8080
 sed -i 's/80/8080/' /etc/nginx/sites-enabled/default
-
-# Give nginx the file permissions it needs
 chown -hR nginx:nginx /etc/nginx/
-chmod 644 /etc/nginx/nginx.conf
-
-# Start nginx
+chmod 777 /etc/nginx/nginx.conf
 sudo -u nginx service nginx start
