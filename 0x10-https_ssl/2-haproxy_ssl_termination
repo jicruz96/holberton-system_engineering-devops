@@ -1,4 +1,3 @@
-
 global
         log /dev/log    local0
         log /dev/log    local1 notice
@@ -8,6 +7,13 @@ global
         user haproxy
         group haproxy
         daemon
+
+
+        # Max num of connections
+        maxconn 2048
+
+        # Max size of temporary DHE keys generated:
+        tune.ssl.default-dh-param 2048
 
         # Default SSL material locations
         ca-base /etc/ssl/certs
@@ -37,29 +43,27 @@ defaults
         errorfile 503 /etc/haproxy/errors/503.http
         errorfile 504 /etc/haproxy/errors/504.http
 
-frontend http
-    bind *:80
-    mode http
-    default_backend web_servers
+        # HTTPS forwarding options
+        option forwardfor
+        option http-server-close
 
-backend web_servers
-    balance roundrobin
-    server 1709-web-01 35.190.188.58:80 check
-    server 1709-web-02 52.23.162.134:80 check
-    
-# Sets up SSL termination at Load Balancer via HAproxy
+frontend www-http
+        bind *:80
+        reqadd X-Forwaarded-Proto:\ http
+        default_backend www-backend
 
-# Create a certificate using certbot
+frontend www-https
+        bind *:443 ssl crt /etc/haproxy/certs/jicruz.tech.pem
+        reqadd X-Forwarded-Proto:\ https
+        acl letsencrypt-acl path_beg /.well-known/acme-challenge/
+        use_backend letsencrypt-backend if letsencrypt-acl
+        default_backend www-backend
 
-#configure HAproxy to accept encrypted traffic for your subdomain www.
+backend www-backend
+        redirect scheme https if !{ ssl_fc }
+        balance roundrobin
+        server 1709-web-01 35.190.188.58:80 check
+        server 1709-web-02 52.23.162.134:80 check
 
-# Requirements:
-
-    # HAproxy must be listening on port TCP 443
-    # HAproxy must be accepting SSL traffic
-    # HAproxy must serve encrypted traffic that will return the / of your web server
-    # When querying the root of your domain name, the page returned must contain Holberton School
-    # Share your HAproxy config as an answer file (/etc/haproxy/haproxy.cfg)
-    # The file 2-haproxy_ssl_termination must be your HAproxy configuration file
-
-# Make sure to install HAproxy 1.5 or higher, SSL termination is not available before v1.5.
+backend letsencrypt-backend
+        server letsenrypt 127.0.0.1:54321
