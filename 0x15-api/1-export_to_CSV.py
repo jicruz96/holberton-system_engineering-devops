@@ -21,7 +21,7 @@ if __name__ == "__main__":
     url = 'https://jsonplaceholder.typicode.com/users/{}/'.format(employee_id)
 
     # Get employee_name
-    employee_name = requests.get(url).json().get('name')
+    username = requests.get(url).json().get('username')
 
     # Get employee task list
     tasks = requests.get(url + 'todos').json()
@@ -36,7 +36,7 @@ if __name__ == "__main__":
             # Make row
             is_complete = str(task.get('completed'))
             title = task.get('title')
-            row = [employee_id, employee_name, is_complete, title]
+            row = [employee_id, username, is_complete, title]
 
             # Write row to file
             writer.writerow(row)
