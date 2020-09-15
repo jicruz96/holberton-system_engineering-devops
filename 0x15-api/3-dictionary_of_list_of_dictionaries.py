@@ -1,13 +1,12 @@
 #!/usr/bin/python3
 """
-exports fake to-do information for a fake employee from jsonplaceholder API,
-given a fake employee ID number as an argument, to USER_ID.json
+exports fake to-do information for all fake employees from jsonplaceholder API,
 
 USAGE:
-    ./1-export_to_CSV.py <user-id>
+    ./3-dictionary_of_list_of_dictionaries.py
 
 RESULT:
-    JSON file named <user-id>.json with user tasks
+    JSON file named todo_all_employes.json with all employee tasks
 """
 from collections import OrderedDict
 import json
