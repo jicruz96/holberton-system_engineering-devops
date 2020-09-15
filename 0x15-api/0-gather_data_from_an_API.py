@@ -12,34 +12,30 @@ from sys import argv
 
 if __name__ == "__main__":
 
-    try:
-        # Set main variables for script
-        employee_id = argv[1]
-        url = 'https://jsonplaceholder.typicode.com/'
+    # Set main variables for script
+    employee_id = argv[1]
+    url = 'https://jsonplaceholder.typicode.com/'
 
-        # Get employee_name
-        employee_request = url + 'users/' + employee_id
-        employee_name = requests.get(employee_request).json().get('name')
+    # Get employee_name
+    employee_request = url + 'users/' + employee_id
+    employee_name = requests.get(employee_request).json().get('name')
 
-        # Get employee task list
-        to_do_request = url + 'todos'
-        tasks = requests.get(to_do_request).json()
-        tasks = [task for task in tasks if task.get(
-            'userId') == int(employee_id)]
+    # Get employee task list
+    task_request = url + 'todos/?userId={}'.format(employee_id)
+    tasks = requests.get(task_request).json()
 
-        # Get number of tasks (total_tasks)
-        total_tasks = len(tasks)
+    # Get number of tasks (total_tasks)
+    total_tasks = len(tasks)
 
-        # Narrow down to completed tasks only
-        tasks = [task for task in tasks if task.get('completed') is True]
+    # Narrow down to completed tasks only
+    tasks = [task for task in tasks if task.get('completed') is True]
 
-        # Get number of completed tasks (done_tasks)
-        done_tasks = len(tasks)
+    # Get number of completed tasks (done_tasks)
+    done_tasks = len(tasks)
 
-        first_line = "Employee {} is done with tasks({}/{})"
-        first_line = first_line.format(employee_name, done_tasks, total_tasks)
-        print(first_line)
-        for task in tasks:
-            print("\t {}".format(task.get('title')))
-    except:
-        pass
+    # Print output
+    first_line = "Employee {} is done with tasks({}/{}):"
+    first_line = first_line.format(employee_name, done_tasks, total_tasks)
+    print(first_line)
+    for task in tasks:
+        print("\t {}".format(task.get('title')))
