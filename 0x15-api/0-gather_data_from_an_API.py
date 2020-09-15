@@ -14,15 +14,13 @@ if __name__ == "__main__":
 
     # Set main variables for script
     employee_id = argv[1]
-    url = 'https://jsonplaceholder.typicode.com/'
+    url = 'https://jsonplaceholder.typicode.com/users/{}/'.format(argv[1])
 
     # Get employee_name
-    employee_request = url + 'users/' + employee_id
-    employee_name = requests.get(employee_request).json().get('name')
+    employee_name = requests.get(url).json().get('name')
 
     # Get employee task list
-    task_request = url + 'todos/?userId={}'.format(employee_id)
-    tasks = requests.get(task_request).json()
+    tasks = requests.get(url + 'todos').json()
 
     # Get number of tasks (total_tasks)
     total_tasks = len(tasks)
