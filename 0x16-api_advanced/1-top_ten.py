@@ -11,7 +11,6 @@ def top_ten(subreddit):
     settings = {'allow_redirects': False, 'headers': {'User-agent': ''}}
     url = "https://www.reddit.com/r/{}/hot.json"
     url = url.format(subreddit)
-    print(url)
     try:
         responses = get(url, **settings).json().get('data').get('children')
         posts = [post['data']['title'] for post in responses][:10]
