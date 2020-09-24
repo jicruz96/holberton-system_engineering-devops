@@ -5,7 +5,7 @@ from requests import get
 
 
 def count_words(subreddit, word_list, last_post="", child=0):
-    """ prints hot posts titles word count (case-insensitive) for 
+    """ prints hot posts titles word count (case-insensitive) for
         words in word_list
     """
     try:
