@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """ defines the recurse function """
 
-from json import dump
 from requests import get
 from urllib.parse import urlencode
 
