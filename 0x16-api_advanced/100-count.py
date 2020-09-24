@@ -19,7 +19,7 @@ def count_words(subreddit, word_list, last_post="", child=0):
         if child:
             return titles
     except:
-        return None
+        print('None')
 
     results = {}
     for word in word_list:
