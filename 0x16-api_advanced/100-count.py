@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 """ defines the count_words function """
+
 from requests import get
 
 
 def count_words(subreddit, word_list, last_post="", child=0):
-    """ returns list of all hot article titles for a given subreddit.
-        If no results are found, returns None.
+    """ prints hot posts titles word count (case-insensitive) for 
+        words in word_list
     """
     try:
         if last_post is None:
@@ -22,25 +23,21 @@ def count_words(subreddit, word_list, last_post="", child=0):
         print()
         return
 
-    results = {}
-    for word in word_list:
-        word = word.lower()
-        n = 0
+    word_list = [word.lower() for word in word_list]
+    word_dict = {word: word_list.count(word) for word in set(word_list)}
+    freq_dict = {}
+    for word, frequency in word_dict.items():
+        word_dict[word] = 0
         for title in titles:
-            n += title.lower().split().count(word)
-        l = results.get(n)
-        if l is None:
-            results.update({n: {word}})
+            word_dict[word] += title.lower().split().count(word) * frequency
+        frequency = word_dict[word]
+        entry = freq_dict.get(frequency)
+        if entry is None:
+            freq_dict.update({frequency: [word]})
         else:
-            results[n].add(word)
-
-    nums = list(results.keys())
-    if 0 in nums:
-        nums.remove(0)
-    if len(nums):
-        nums.sort(reverse=True)
-    for num in nums:
-        words = list(results[num])
+            freq_dict[frequency].append(word)
+    frequencies_of_words = sorted(freq_dict.items(), reverse=True)
+    for frequency, words in frequencies_of_words:
         words.sort()
         for word in words:
-            print('{}: {}'.format(word, num))
+            print('{}: {}'.format(word, frequency))
