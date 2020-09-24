@@ -36,6 +36,8 @@ def count_words(subreddit, word_list, last_post="", child=0):
             freq_dict.update({frequency: [word]})
         else:
             freq_dict[frequency].append(word)
+    if 0 in freq_dict:
+        del freq_dict[0]
     frequencies_of_words = sorted(freq_dict.items(), reverse=True)
     for frequency, words in frequencies_of_words:
         words.sort()
