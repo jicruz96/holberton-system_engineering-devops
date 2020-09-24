@@ -20,7 +20,6 @@ def count_words(subreddit, word_list, last_post="", child=0):
         if child:
             return titles
     except:
-        print()
         return
 
     word_list = [word.lower() for word in word_list]
