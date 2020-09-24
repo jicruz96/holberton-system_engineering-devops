@@ -1,31 +1,45 @@
 #!/usr/bin/python3
 """ defines the count_words function """
-
 from requests import get
 
 
-def count_words(subreddit, word_list):
-    """ prints word count for words in word list from titles of hot posts
-        of a given subreddit. If no results are found, prints None.
+def count_words(subreddit, word_list, last_post="", child=0):
+    """ returns list of all hot article titles for a given subreddit.
+        If no results are found, returns None.
     """
-    if word_list is None or len(word_list) is 0:
-        return
+    try:
+        if last_post is None:
+            return []
+        query = "?limit=100&after=" + last_post
+        url = "https://www.reddit.com/r/{}/hot.json{}".format(subreddit, query)
+        settings = {'headers': {'User-agent': ''}, 'allow_redirects': False}
+        data = get(url, **settings).json().get('data')
+        titles = [post['data']['title'] for post in data.get('children')]
+        titles = titles + count_words(subreddit, word_list, data['after'], 1)
+        if child:
+            return titles
+    except:
+        return None
 
-    get_titles = __import__('2-recurse').recurse
-    titles = get_titles(subreddit)
-    if titles is None:
-        return
-    results = []
-    word_list = set(word_list)
-
+    results = {}
     for word in word_list:
-        sum = 0
+        word = word.lower()
+        n = 0
         for title in titles:
-            sum += title.lower().split().count(word.lower())
+            n += title.lower().split().count(word)
+        l = results.get(n)
+        if l is None:
+            results.update({n: {word}})
+        else:
+            results[n].add(word)
 
-        if sum:
-            results.append((word, sum))
-
-    results.sort(key=lambda x: x[1], reverse=True)
-    for result in results:
-        print("{}: {}".format(result[0], result[1]))
+    nums = list(results.keys())
+    if 0 in nums:
+        nums.remove(0)
+    if len(nums):
+        nums.sort(reverse=True)
+    for num in nums:
+        words = list(results[num])
+        words.sort()
+        for word in words:
+            print('{}: {}'.format(word, num))
