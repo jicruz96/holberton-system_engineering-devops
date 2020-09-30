@@ -8,7 +8,7 @@ path => '/var/www/html',
 mode => '0666',
 group => 'www-data',
 owner => 'www-data',
-conctent => 'DirectoryIndex index.php'
+content => 'DirectoryIndex index.php'
 }
 
 file_line { 'wp-settings.php':
