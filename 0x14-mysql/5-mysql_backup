@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Creates a backup.sql tar ball
+mysqldump -uroot -p"$1" --all-databases > backup.sql
+tar -czvf "$(data +"%d_%m_%Y)".tar.gz backup.sql
